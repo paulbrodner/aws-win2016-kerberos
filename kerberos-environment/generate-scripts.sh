@@ -25,7 +25,6 @@ netsh interface ip set address "Ethernet" static \$privateIP \$subnet \$gw
 
 netsh advfirewall firewall set rule group=”network discovery” new enable=yes
 
-# TODO add here code for generating keys
 </powershell>
 EOF
 

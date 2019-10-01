@@ -28,4 +28,5 @@ Install-ADDSForest `
 -SysvolPath "C:\Windows\SYSVOL" `
 -Force:$true
 
+# TODO add here code for generating keys
 Write-Host "DONE: installing DNS"
