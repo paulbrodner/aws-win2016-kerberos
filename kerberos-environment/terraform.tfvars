@@ -1,0 +1,6 @@
+domain                      = "kerb-test"
+hosted_zone                 = "dev.alfresco.me"
+kerberos_client_username    = "admin"
+kerberos_client_password    = "Alfresco!12346789"
+subnet_id                   = "subnet-03ca8913a7b738c32"
+vpc_security_group_id       = "sg-0f3827d4f838059ce"

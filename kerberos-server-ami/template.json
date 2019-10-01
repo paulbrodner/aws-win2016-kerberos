@@ -1,0 +1,70 @@
+{
+    "variables": {
+        "name": "kerb-test",
+        "domain": "kerb-test",
+        "hosted_zone": "dev.alfresco.me",
+        "region": "eu-west-1",
+        "source_ami_id": "ami-09c6f606506004483",
+        "vpc_id": "vpc-0e27a5ced96393be5",
+        "subnet_id": "subnet-03ca8913a7b738c32",
+        "security_group_id": "sg-0f3827d4f838059ce",
+        "admin_user": "admin",
+        "admin_pwd": "Alfresco!12346789"        
+    },
+    "builders": [
+        {
+            "type": "amazon-ebs",
+            "region": "{{user `region`}}",
+            "source_ami": "{{user `source_ami_id`}}",
+            "instance_type": "t2.large",
+            "user_data_file": "scripts/setupWinRM.ps1",
+            "vpc_id": "{{user `vpc_id`}}",
+            "subnet_id": "{{user `subnet_id`}}",
+            "security_group_id": "{{user `security_group_id`}}",
+            "associate_public_ip_address": true,
+            "communicator": "winrm",
+            "winrm_username": "Administrator",            
+            "winrm_port": 5986,
+            "winrm_insecure": true,
+            "winrm_use_ssl": true,
+            "name": "{{user `name`}}",
+            "ami_name": "{{user `name`}} {{timestamp}}",
+            "launch_block_device_mappings": [
+                {
+                    "device_name": "/dev/sda1",
+                    "volume_size": 30,
+                    "volume_type": "gp2",
+                    "delete_on_termination": true
+                }
+            ],
+            "tags": {
+                "Name": "{{user `name`}}",
+                "Project": "Platform Services"
+            },
+            "ami_description": "Windows Server AMI for Platform Services: {{user `name`}}"
+        }
+    ],
+    "provisioners": [
+        {
+            "type": "powershell",
+            "environment_vars": [
+                "ADMIN={{user `admin_user`}}",
+                "ADMIN_PWD={{user `admin_pwd`}}"
+            ],
+            "scripts": [
+                "scripts/add-users.ps1"
+            ]
+        },
+        {
+            "type": "powershell",
+            "environment_vars": [                
+                "ADMIN_PWD={{user `admin_pwd`}}",
+                "DOMAIN={{user `domain`}}",
+                "HOSTED_ZONE={{user `hosted_zone`}}"
+            ],
+            "scripts": [
+                "scripts/setup-ad.ps1"
+            ]
+        }
+    ]
+}
