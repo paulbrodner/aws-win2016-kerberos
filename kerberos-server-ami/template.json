@@ -9,7 +9,11 @@
         "subnet_id": "subnet-03ca8913a7b738c32",
         "security_group_id": "sg-0f3827d4f838059ce",
         "admin_user": "admin",
-        "admin_pwd": "Alfresco!12346789"        
+        "admin_pwd": "Alfresco!12346789",
+        "kerb_auth_user": "kerberosauth",
+        "kerb_auth_pwd": "Alfresco!12346789",
+        "kerb_test_user": "kerbtestuser",
+        "kerb_test_pwd": "Alfresco!12346789"
     },
     "builders": [
         {
@@ -49,7 +53,13 @@
             "type": "powershell",
             "environment_vars": [
                 "ADMIN={{user `admin_user`}}",
-                "ADMIN_PWD={{user `admin_pwd`}}"
+                "ADMIN_PWD={{user `admin_pwd`}}",
+                "KERBAUTH={{user `kerb_auth_user`}}",
+                "KERBAUTH_PWD={{user `kerb_auth_pwd`}}",
+                "KERBTEST={{user `kerb_test_user`}}",
+                "KERBTEST_PWD={{user `kerb_test_pwd`}}",
+                "DOMAIN={{user `domain`}}",
+                "HOSTED_ZONE={{user `hosted_zone`}}"
             ],
             "scripts": [
                 "scripts/add-users.ps1"
