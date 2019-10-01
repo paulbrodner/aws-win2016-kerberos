@@ -31,12 +31,15 @@ $ make start-server AMI_ID=`the-id-of-the-AMI-created`
 ```
 
 #### c) start the Kerberos Client
+> this will start the Windows client machine
+> follow [this guide](https://aws.amazon.com/premiumsupport/knowledge-center/retrieve-windows-admin-password/) to retrieve administrator's password to login remotely
 
 ```
 $ make start-client
 ```
 
 #### d) cleanup everithing
+> this will delete the kerberos server and windows machine, route53 created. It will NOT delete the AMI
 
 ```
 $ make cleanup
