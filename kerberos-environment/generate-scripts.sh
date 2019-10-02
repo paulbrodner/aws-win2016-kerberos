@@ -42,12 +42,8 @@ net localgroup administrators ${KERBEROS_CLIENT_USERNAME} /add
 
 netsh dnsclient add dnsserver "Ethernet" \$ip 4
 
-# add computer in domain
-\$password = "${KERBEROS_CLIENT_PASSWORD}" | ConvertTo-SecureString -asPlainText -Force
-\$username = "\$domain\admin" 
-\$credential = New-Object System.Management.Automation.PSCredential(\$username,\$password)
-
-Add-Computer -DomainName \$domain -Credential \$credential -Restart
+# disabling UAC
+Set-ItemProperty -Path 'HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System' -Name 'LocalAccountTokenFilterPolicy' -Value 1 -Force
 
 Write-Host "Start: installing Chrome  browser"
 Invoke-WebRequest "http://dl.google.com/chrome/install/375.126/chrome_installer.exe" -OutFile \$env:TEMP\chrome_installer.exe; 
@@ -76,5 +72,13 @@ New-Item -Path "HKLM:\Software\Policies\Google\Chrome"
 New-ItemProperty -Path "HKLM:\Software\Policies\Google\Chrome" -PropertyType String  -Name AuthNegotiateDelegateWhitelist -Value "*.dev.alfresco.me"
 
 Write-Host "DONE: applying Chrome Group Policy for Kerberos authentication"
+
+# add computer in domain
+\$password = "${KERBEROS_CLIENT_PASSWORD}" | ConvertTo-SecureString -asPlainText -Force
+\$username = "\$domain\admin" 
+\$credential = New-Object System.Management.Automation.PSCredential(\$username,\$password)
+
+Add-Computer -DomainName \$domain -Credential \$credential -Restart
+
 </powershell>
 EOF
