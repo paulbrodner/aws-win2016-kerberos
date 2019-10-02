@@ -55,5 +55,26 @@ Start-Process -FilePath \$env:TEMP\chrome_installer.exe -Args "/silent /install"
 Remove-Item \$env:TEMP\chrome_installer.exe
 
 Write-Host "Done: installing Chrome  browser"
+
+Write-Host "START: applying Chrome Group Policy for Kerberos authentication"
+
+# following DOCS: https://docs.alfresco.com/6.1/concepts/auth-kerberos-clientconfig.html
+# we extracted only the files that we need from the zip and copy them to PolicyDefinitions  on client
+\$admxRoot   = "https://raw.githubusercontent.com/paulbrodner/aws-win2016-kerberos/DEPLOY-844-group-policy/"
+\$chromeAdmx = \$admxRoot + "kerberos-environment/scripts/admx/chrome.admx"
+\$chromeAdml = \$admxRoot + "kerberos-environment/scripts/admx/en-US/chrome.adml"
+
+Invoke-WebRequest \$chromeAdmx -OutFile C:\Windows\PolicyDefinitions\chrome.admx;
+Invoke-WebRequest \$chromeAdml -OutFile C:\Windows\PolicyDefinitions\en-US\chrome.adml;
+
+Write-Host  \$chromeAdmx;
+gpupdate /force
+
+# we also need to specify the wildcard of the Kerberos delegation server whitelist  (step 8. from docs above)
+New-Item -Path "HKLM:\Software\Policies\Google"
+New-Item -Path "HKLM:\Software\Policies\Google\Chrome"
+New-ItemProperty -Path "HKLM:\Software\Policies\Google\Chrome" -PropertyType String  -Name AuthNegotiateDelegateWhitelist -Value "*.dev.alfresco.me"
+
+Write-Host "DONE: applying Chrome Group Policy for Kerberos authentication"
 </powershell>
 EOF
