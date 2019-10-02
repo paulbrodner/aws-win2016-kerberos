@@ -51,6 +51,17 @@
     "provisioners": [
         {
             "type": "powershell",
+            "environment_vars": [                
+                "ADMIN_PWD={{user `admin_pwd`}}",
+                "DOMAIN={{user `domain`}}",
+                "HOSTED_ZONE={{user `hosted_zone`}}"
+            ],
+            "scripts": [
+                "scripts/setup-ad.ps1"
+            ]
+        },
+        {
+            "type": "powershell",
             "environment_vars": [
                 "ADMIN={{user `admin_user`}}",
                 "ADMIN_PWD={{user `admin_pwd`}}",
@@ -63,17 +74,6 @@
             ],
             "scripts": [
                 "scripts/add-users.ps1"
-            ]
-        },
-        {
-            "type": "powershell",
-            "environment_vars": [                
-                "ADMIN_PWD={{user `admin_pwd`}}",
-                "DOMAIN={{user `domain`}}",
-                "HOSTED_ZONE={{user `hosted_zone`}}"
-            ],
-            "scripts": [
-                "scripts/setup-ad.ps1"
             ]
         }
     ]

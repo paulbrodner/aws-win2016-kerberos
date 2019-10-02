@@ -1,30 +1,33 @@
+import-module activedirectory
+
 $user=$Env:ADMIN
 $user_pwd=$Env:ADMIN_PWD
+$domain = "$Env:DOMAIN"
+$hosted_zone = "$Env:HOSTED_ZONE"
+$domainname = "$domain.$hosted_zone"
+$domain_array = $domainname.split('.')
+$domain_path = "cn=Users"
+$kerbtest = "$Env:KERBTEST"
+$kerbtest_pwd = "$Env:KERBTEST_PWD"
+$kerbauth = "$Env:KERBAUTH"
+$kerbauth_pwd = "$Env:KERBAUTH_PWD"
 Write-Host "adding user: [$user] with [$user_pwd] in administrator group"
 
 net user $user $user_pwd /add /y
 net localgroup administrators $user /add
 
 #Set domain path on which users are created E.g "cn=Users,dc=alfresco,dc=com"
-$DOMAIN="$Env:DOMAIN"
-$HOSTED_ZONE="$Env:HOSTED_ZONE"
-$DOMAINNAME = "$DOMAIN.$HOSTED_ZONE"
-$DOMAIN_ARRAY = $DOMAINNAME.split('.')
-$DOMAIN_PATH = “cn=Users"
-
-foreach ($domcomp in $DOMAIN_ARRAY) {
-   $DOMAIN_PATH = "$DOMAIN_PATH,dc=$domcomp"
+foreach ($domcomp in $domain_array) {
+   $domain_path = "$domain_path,dc=$domcomp"
 }
 
 #Create kerberos authentication user used for creating keytabs
 Write-Host "Create kerberos authentication user: [$KERBAUTH]"
-
-$KERBAUTH_PASSWORD = ConvertTo-SecureString $KERBAUTH_PWD -AsPlainText -Force
-New-ADUser -Name $KERBAUTH -DisplayName “Kerberos Auth” -GivenName Kerberos -Surname Auth -TrustedForDelegation 1 -Path "$DOMAIN_PATH” -ChangePasswordAtLogon 0 -AccountPassword $KERBAUTH_PASSWORD -PasswordNeverExpires 1 -Enabled 1
-Set-ADAccountControl -Identity $KERBAUTH -DoesNotRequirePreAuth:$true
+$kerbauth_pwd_secure = ConvertTo-SecureString $kerbauth_pwd -AsPlainText -Force
+New-ADUser -Name $kerbauth -DisplayName "Kerberos Auth" -GivenName Kerberos -Surname Auth -TrustedForDelegation 1 -Path "$domain_path" -ChangePasswordAtLogon 0 -AccountPassword $kerbauth_pwd_secure -PasswordNeverExpires 1 -Enabled 1
+Set-ADAccountControl -Identity $kerbauth -DoesNotRequirePreAuth:$true
 
 #Create kerberos test user
-Write-Host "Create kerberos authentication user to use in tests: [$KERBTEST]"
-
-$KERBTEST_PASSWORD = ConvertTo-SecureString $KERBTEST_PWD -AsPlainText -Force
-New-ADUser -Name $KERBTEST -DisplayName “Kerberos TestUser” -GivenName Kerberos -Surname TestUser -TrustedForDelegation 1 -Path "$DOMAIN_PATH” -ChangePasswordAtLogon 0 -AccountPassword $KERBTEST_PASSWORD -PasswordNeverExpires 1 -Enabled 1
+Write-Host "Create kerberos authentication user to use in tests: [$kerbtest]"
+$krbtest_pwd_secure = ConvertTo-SecureString $kerbtest_pwd -AsPlainText -Force
+New-ADUser -Name $kerbtest -DisplayName "Kerberos TestUser" -GivenName Kerberos -Surname TestUser -TrustedForDelegation 1 -Path "$domain_path" -ChangePasswordAtLogon 0 -AccountPassword $krbtest_pwd_secure -PasswordNeverExpires 1 -Enabled 1
