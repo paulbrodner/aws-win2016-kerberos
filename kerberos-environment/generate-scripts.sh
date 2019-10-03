@@ -24,6 +24,27 @@ netsh advfirewall firewall set rule group=”network discovery” new enable=yes
 # we only need to add it to Domain Admins so we can remotely loggin with it
 net group "Domain Admins" ${SERVER_ADMIN_USERNAME}  /add
 
+\$domain = "${DOMAIN}.${HOSTED_ZONE}"
+\$domain_array = \$domain.split('.')
+\$domain_path = "cn=Users"
+
+#Set domain path on which users are created E.g "cn=Users,dc=alfresco,dc=com"
+foreach (\$domcomp in \$domain_array) {
+   \$domain_path = "\$domain_path,dc=\$domcomp"
+}
+#Create kerberos authentication user used for creating keytabs
+Write-Host "Create KERBEROS_ADMIN_USERNAME: [${KERBEROS_ADMIN_USERNAME}] in domain: [\$domain_path]"
+\$kerbauth_pwd_secure = ConvertTo-SecureString ${KERBEROS_ADMIN_PASSWORD} -AsPlainText -Force
+
+New-ADUser -Server \$Env:computername -Name ${KERBEROS_ADMIN_USERNAME} -DisplayName "Kerberos Auth" -GivenName Kerberos -Surname Auth -TrustedForDelegation 1 -Path "\$domain_path" -ChangePasswordAtLogon 0 -AccountPassword \$kerbauth_pwd_secure -PasswordNeverExpires 1 -Enabled 1
+Set-ADAccountControl -Server \$Env:computername -Identity ${KERBEROS_ADMIN_USERNAME} -DoesNotRequirePreAuth:\$true
+net group "Domain Admins" ${KERBEROS_ADMIN_USERNAME}  /add
+
+Write-Host "Create KERBEROS_TEST_USERNAME : [${KERBEROS_TEST_USERNAME}]"
+\$krbtest_pwd_secure = ConvertTo-SecureString ${KERBEROS_TEST_PASSWORD} -AsPlainText -Force
+New-ADUser -Server \$Env:computername -Name ${KERBEROS_TEST_USERNAME} -DisplayName "Kerberos TestUser" -GivenName Kerberos -Surname TestUser -TrustedForDelegation 1 -Path "\$domain_path" -ChangePasswordAtLogon 0 -AccountPassword \$krbtest_pwd_secure -PasswordNeverExpires 1 -Enabled 1
+net group "Domain Admins" ${KERBEROS_TEST_PASSWORD}  /add
+
 </powershell>
 EOF
 
