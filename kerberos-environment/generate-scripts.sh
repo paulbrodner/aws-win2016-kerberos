@@ -22,7 +22,7 @@ netsh advfirewall firewall set rule group=”network discovery” new enable=yes
 
 # this user is already created and exist here
 # we only need to add it to Domain Admins so we can remotely loggin with it
-net group "Domain Admins" ${SERVER_ADMIN_USERNAME}"  /add
+net group "Domain Admins" ${SERVER_ADMIN_USERNAME}  /add
 
 </powershell>
 EOF
@@ -31,8 +31,8 @@ EOF
 cat <<EOF > ./scripts/setup-client.ps1
 <powershell>
 # add admin user
-net user ${KERBEROS_CLIENT_USERNAME} ‘${KERBEROS_CLIENT_PASSWORD}’ /add /y
-net localgroup administrators ${KERBEROS_CLIENT_USERNAME} /add
+net user ${KERBEROS_ADMIN_USERNAME} ‘${KERBEROS_ADMIN_PASSWORD}’ /add /y
+net localgroup administrators ${KERBEROS_ADMIN_USERNAME} /add
 
 \$domain = "${DOMAIN}.${HOSTED_ZONE}"
 # set DNS ip address

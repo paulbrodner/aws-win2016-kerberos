@@ -52,8 +52,8 @@ $ make start-client
 | ------------- | ------------- |
 | Username      | `SERVER_ADMIN_USERNAME`@`DOMAIN`.`HOSTED_ZONE`  |
 | Password      | `SERVER_ADMIN_PASSWORD` |
-| Username      | `KERBEROS_CLIENT_USERNAME`  |
-| Password      | `KERBEROS_CLIENT_PASSWORD` |
+| Username      | `KERBEROS_ADMIN_USERNAME`  |
+| Password      | `KERBEROS_ADMIN_PASSWORD` |
 
 
 #### d) cleanup everithing
