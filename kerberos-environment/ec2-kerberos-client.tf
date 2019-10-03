@@ -1,11 +1,11 @@
 
 resource "aws_instance" "kerberos-client" {
-  ami                         = "${var.windows_client_ami}"
-  key_name                    = "${var.key_name}"
+  ami                         = "${var.CLIENT_AMI}"
+  key_name                    = "${var.KEY_PAIR_NAME}"
   instance_type               = "t2.large"
   disable_api_termination     = "false"
-  subnet_id                   = "${var.subnet_id}"
-  vpc_security_group_ids      = ["${var.vpc_security_group_id}"]
+  subnet_id                   = "${var.SUBNET_ID}"
+  vpc_security_group_ids      = ["${var.VPC_SECURITY_GROUP_ID}"]
   associate_public_ip_address = "true"
 
   root_block_device {
@@ -16,7 +16,7 @@ resource "aws_instance" "kerberos-client" {
 
   monitoring = false
   tags = {
-    Name   = "${var.domain}-win-client"
+    Name   = "${var.DOMAIN}-client"
     Author = "pbrodner"
     Tool   = "terraform"
   }
