@@ -1,5 +1,8 @@
-include kerberos-environment/terraform.tfvars
-export $(shell sed 's/=.*//' kerberos-environment/terraform.tfvars)
+# include kerberos-environment/terraform.tfvars
+# export $(shell sed 's/=.*//' kerberos-environment/terraform.tfvars)
+
+SETTINGS_FILE?=../settings.json
+
 
 DEBUG?=false
 BUILD_ARGS	:=build
@@ -13,12 +16,12 @@ endif
 help: ## output this help
 	@awk 'BEGIN {FS = ":.*?## "} /^[a-zA-Z_-]+:.*?## / {printf "\033[36m%-30s\033[0m %s\n", $$1, $$2}' $(MAKEFILE_LIST)
 
-build-ami: ## building a new Kerberos AMI
+build-server: ## building a new Kerberos AMI
 	@echo "Building a new AMI"
 	@cat /dev/null > $(PACKER_LOG_PATH)
 	cd  kerberos-server-ami && \
-	packer validate template.json && \
-	packer $(BUILD_ARGS) template.json
+	packer validate -var-file $(SETTINGS_FILE) template.json && \
+	packer $(BUILD_ARGS) -var-file $(SETTINGS_FILE) template.json
 
 start-server: ## starting up the Kerberos Server
 ifeq ($(AMI_ID), )
@@ -27,17 +30,16 @@ ifeq ($(AMI_ID), )
 endif
 	@echo "Creating a new Kerberos Environment"
 	cd kerberos-environment && \
-	./generate-scripts.sh && \
-	terraform apply -var "kerberos_server_ami=$(AMI_ID)" -target aws_route53_record.domain 
+	./generate-scripts.sh $(SETTINGS_FILE) && \
+	terraform apply -var-file $(SETTINGS_FILE) -var "SERVER_AMI=$(AMI_ID)" -target aws_route53_record.domain 
 
 start-client: ## starting up the Kerberos Client
 	@echo "Starting up a new Client added in Kerberos environment"
 	cd kerberos-environment && \
-	./generate-scripts.sh && \
-	terraform apply -target aws_instance.kerberos-client
-
+	./generate-scripts.sh $(SETTINGS_FILE) && \
+	terraform apply -var-file $(SETTINGS_FILE) -target aws_instance.kerberos-client
 
 cleanup: ## deleting existing Kerberos environment
 	@echo "Deleting existing Kerberos Environment"
 	cd kerberos-environment && \
-	terraform destroy
+	terraform destroy -var-file $(SETTINGS_FILE)

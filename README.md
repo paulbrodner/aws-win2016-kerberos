@@ -18,25 +18,43 @@ $ terraform init
 > run `make` to see help messages
 
 #### a) build the custom Kerberos Server as AMI
-> custom configuration can be tweeked directly from [kerberos-server-ami/template.json](./kerberos-server-ami/template.json)
+> custom configuration can be tweeked directly on  [settings.json](./settings.json) file. 
+
 ```
-$ make build-ami
+$ make build-server
 ```
 
 #### b) start the Kerberos Server using AMI
 > follow the online guidelines when prompted
 
 ```
-$ make start-server AMI_ID=`the-id-of-the-AMI-created`
+$ make start-server AMI_ID=<use-the-id-of-the-AMI-created-previous>
 ```
+> you can use the following login credentials to login remotely to client machine (replacing Format with values from [settings.json](./settings.json) )
+
+| Field         | Format |
+| ------------- | ------------- |
+| Username      | `SERVER_ADMIN_USERNAME`  |
+| Password      | `SERVER_ADMIN_PASSWORD` |
 
 #### c) start the Kerberos Client
-> this will start the Windows client machine
+> this will start the Windows client machine that will be added in domain, in the server that we started on the previous step
+
 > follow [this guide](https://aws.amazon.com/premiumsupport/knowledge-center/retrieve-windows-admin-password/) to retrieve administrator's password to login remotely
 
 ```
 $ make start-client
 ```
+
+> you can use the following login credentials to login remotely to client machine (replacing Format with values from [settings.json](./settings.json) )
+
+| Field         | Format |
+| ------------- | ------------- |
+| Username      | `SERVER_ADMIN_USERNAME`@`DOMAIN`.`HOSTED_ZONE`  |
+| Password      | `SERVER_ADMIN_PASSWORD` |
+| Username      | `KERBEROS_CLIENT_USERNAME`  |
+| Password      | `KERBEROS_CLIENT_PASSWORD` |
+
 
 #### d) cleanup everithing
 > this will delete the kerberos server and windows machine, route53 created. It will NOT delete the AMI

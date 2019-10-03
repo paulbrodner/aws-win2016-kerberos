@@ -1,15 +1,10 @@
 #!/usr/bin/env bash
 set -u
 
-function strip_quotes
-{     
-    echo $1 |  sed -e 's/"//g' 
-}
-
-DOMAIN=$(strip_quotes $domain)
-HOSTED_ZONE=$(strip_quotes $hosted_zone)
-KERBEROS_CLIENT_USERNAME=$(strip_quotes $kerberos_client_username)
-KERBEROS_CLIENT_PASSWORD=$(strip_quotes $kerberos_client_password)
+SETTINGS="${1:-../settings.json}"
+# export all values from json as key=value in environment
+set -x
+$( cat ${SETTINGS} | jq -r 'keys[] as $k | "export \($k)=\(.[$k])"' )
 
 # generate PowerShell script for defining AD
 cat <<EOF > ./scripts/setup-server.ps1
@@ -24,6 +19,10 @@ netsh interface ip add dns name="Ethernet" addr=\$dns index=2
 netsh interface ip set address "Ethernet" static \$privateIP \$subnet \$gw
 
 netsh advfirewall firewall set rule group=”network discovery” new enable=yes
+
+# this user is already created and exist here
+# we only need to add it to Domain Admins so we can remotely loggin with it
+net group "Domain Admins" ${SERVER_ADMIN_USERNAME}"  /add
 
 </powershell>
 EOF
@@ -74,8 +73,8 @@ New-ItemProperty -Path "HKLM:\Software\Policies\Google\Chrome" -PropertyType Str
 Write-Host "DONE: applying Chrome Group Policy for Kerberos authentication"
 
 # add computer in domain
-\$password = "${KERBEROS_CLIENT_PASSWORD}" | ConvertTo-SecureString -asPlainText -Force
-\$username = "\$domain\admin" 
+\$password = "${SERVER_ADMIN_PASSWORD}" | ConvertTo-SecureString -asPlainText -Force
+\$username = "\$domain\\${SERVER_ADMIN_USERNAME}" 
 \$credential = New-Object System.Management.Automation.PSCredential(\$username,\$password)
 
 Add-Computer -DomainName \$domain -Credential \$credential -Restart
