@@ -43,7 +43,7 @@ net group "Domain Admins" ${KERBEROS_ADMIN_USERNAME}  /add
 Write-Host "Create KERBEROS_TEST_USERNAME : [${KERBEROS_TEST_USERNAME}]"
 \$krbtest_pwd_secure = ConvertTo-SecureString ${KERBEROS_TEST_PASSWORD} -AsPlainText -Force
 New-ADUser -Server \$Env:computername -Name ${KERBEROS_TEST_USERNAME} -DisplayName "Kerberos TestUser" -GivenName Kerberos -Surname TestUser -TrustedForDelegation 1 -Path "\$domain_path" -ChangePasswordAtLogon 0 -AccountPassword \$krbtest_pwd_secure -PasswordNeverExpires 1 -Enabled 1
-net group "Domain Admins" ${KERBEROS_TEST_PASSWORD}  /add
+net group "Domain Admins" ${KERBEROS_TEST_USERNAME}  /add
 
 </powershell>
 EOF

@@ -23,6 +23,7 @@ $ terraform init
 ```
 $ make build-server
 ```
+![Farmers Market Finder Demo](./docs/images/build-server-1.mp4)
 
 #### b) start the Kerberos Server using AMI
 > follow the online guidelines when prompted
@@ -52,8 +53,10 @@ $ make start-client
 | ------------- | ------------- |
 | Username      | `SERVER_ADMIN_USERNAME`@`DOMAIN`.`HOSTED_ZONE`  |
 | Password      | `SERVER_ADMIN_PASSWORD` |
-| Username      | `KERBEROS_ADMIN_USERNAME`  |
+| Username      | `KERBEROS_ADMIN_USERNAME`@`DOMAIN`.`HOSTED_ZONE`  |
 | Password      | `KERBEROS_ADMIN_PASSWORD` |
+| Username      | `KERBEROS_TEST_USERNAME`@`DOMAIN`.`HOSTED_ZONE`  |
+| Password      | `KERBEROS_TEST_PASSWORD` |
 
 
 #### d) cleanup everithing

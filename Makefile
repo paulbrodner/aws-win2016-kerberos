@@ -17,9 +17,9 @@ help: ## output this help
 	@awk 'BEGIN {FS = ":.*?## "} /^[a-zA-Z_-]+:.*?## / {printf "\033[36m%-30s\033[0m %s\n", $$1, $$2}' $(MAKEFILE_LIST)
 
 build-server: ## building a new Kerberos AMI
-	@echo "Building a new AMI"
-	@cat /dev/null > $(PACKER_LOG_PATH)
+	@echo "Building a new AMI"	
 	cd  kerberos-server-ami && \
+	@cat /dev/null > $(PACKER_LOG_PATH) && \
 	packer validate -var-file $(SETTINGS_FILE) template.json && \
 	packer $(BUILD_ARGS) -var-file $(SETTINGS_FILE) template.json
 
