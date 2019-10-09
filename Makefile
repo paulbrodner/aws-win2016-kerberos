@@ -32,19 +32,16 @@ ifeq ($(AMI_ID), )
 endif
 	@echo "Creating a new Kerberos Environment"
 	cd kerberos-environment && \
-	./generate-scripts.sh $(SETTINGS_FILE) && \
 	cat /dev/null > $(TF_LOG_PATH) && \
 	terraform apply -var-file $(SETTINGS_FILE) -var "SERVER_AMI=$(AMI_ID)" -target aws_route53_record.domain 
 
 start-client: ## starting up the Kerberos Client
 	@echo "Starting up a new Client added in Kerberos environment"
 	cd kerberos-environment && \
-	./generate-scripts.sh $(SETTINGS_FILE) && \
 	cat /dev/null > $(TF_LOG_PATH) && \
 	terraform apply -var-file $(SETTINGS_FILE) -target aws_instance.kerberos-client
 
 cleanup: ## deleting existing Kerberos environment
 	@echo "Deleting existing Kerberos Environment"
 	cd kerberos-environment && \
-	./generate-scripts.sh $(SETTINGS_FILE) && \
 	terraform destroy -var-file $(SETTINGS_FILE)

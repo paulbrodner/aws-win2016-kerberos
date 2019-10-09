@@ -41,6 +41,11 @@ variable "KERBEROS_TEST_PASSWORD" {
   default     = "to-be-provided"
 }
 
+variable "FQDN" {
+  default     = "to-be-provided"
+  description = "fully qualified domain name (FQDN) that you want to use to forward queries"  
+}
+
 variable "CLIENT_AMI" {
   description = "Which AMI should we use to create new Windows Server 2016 (using default value from region)"
   default     = "ami-09c6f606506004483"
