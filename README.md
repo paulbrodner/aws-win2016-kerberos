@@ -24,7 +24,9 @@ $ terraform init
 $ make build-server
 ```
 
-<video src="./docs/images/build-server-1.mp4" width="320" height="200" controls preload></video>
+[![](docs/images/play.png?raw=true)](./docs/images/build-server-1.mp4 "Play")
+
+[![](docs/images/play.png?raw=true)](./docs/images/build-server-2.mp4 "Play")
 
 #### b) start the Kerberos Server using AMI
 > follow the online guidelines when prompted
@@ -38,6 +40,10 @@ $ make start-server AMI_ID=<use-the-id-of-the-AMI-created-previous>
 | ------------- | ------------- |
 | Username      | `SERVER_ADMIN_USERNAME`  |
 | Password      | `SERVER_ADMIN_PASSWORD` |
+
+[![](docs/images/play.png?raw=true)](./docs/images/start-server-1.mp4 "Play")
+
+[![](docs/images/play.png?raw=true)](./docs/images/start-server-2.mp4 "Play")
 
 #### c) start the Kerberos Client
 > this will start the Windows client machine that will be added in domain, in the server that we started on the previous step
