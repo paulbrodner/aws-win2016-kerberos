@@ -23,7 +23,8 @@ $ terraform init
 ```
 $ make build-server
 ```
-![Farmers Market Finder Demo](./docs/images/build-server-1.mp4)
+
+![build](./docs/images/build-server-1.mp4?raw=true)
 
 #### b) start the Kerberos Server using AMI
 > follow the online guidelines when prompted
