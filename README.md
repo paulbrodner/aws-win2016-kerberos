@@ -24,7 +24,7 @@ $ terraform init
 $ make build-server
 ```
 
-![build](./docs/images/build-server-1.mp4?raw=true)
+<video src="./docs/images/build-server-1.mp4" width="320" height="200" controls preload></video>
 
 #### b) start the Kerberos Server using AMI
 > follow the online guidelines when prompted
