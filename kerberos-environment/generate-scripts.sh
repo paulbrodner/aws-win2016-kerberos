@@ -9,16 +9,6 @@ $( cat ${SETTINGS} | jq -r 'keys[] as $k | "export \($k)=\(.[$k])"' )
 # generate PowerShell script for defining AD
 cat <<EOF > ./scripts/setup-server.ps1
 <powershell>
-\$privateIP=((ipconfig | findstr [0-9].\.)[0]).Split()[-1]
-\$subnet=((ipconfig | findstr [0-9].\.)[1]).Split()[-1]
-\$gw=((ipconfig | findstr [0-9].\.)[2]).Split()[-1]
-\$dns=(netsh interface ip show dnsservers | findstr [0-9].\.).Split()[-1]
-
-netsh interface ip set dns "Ethernet" static "127.0.0.1"
-netsh interface ip add dns name="Ethernet" addr=\$dns index=2
-netsh interface ip set address "Ethernet" static \$privateIP \$subnet \$gw
-
-netsh advfirewall firewall set rule group=”network discovery” new enable=yes
 
 # this user is already created and exist here
 # we only need to add it to Domain Admins so we can remotely loggin with it
@@ -45,6 +35,17 @@ Write-Host "Create KERBEROS_TEST_USERNAME : [${KERBEROS_TEST_USERNAME}]"
 New-ADUser -Server \$Env:computername -Name ${KERBEROS_TEST_USERNAME} -DisplayName "Kerberos TestUser" -GivenName Kerberos -Surname TestUser -TrustedForDelegation 1 -Path "\$domain_path" -ChangePasswordAtLogon 0 -AccountPassword \$krbtest_pwd_secure -PasswordNeverExpires 1 -Enabled 1
 net group "Domain Admins" ${KERBEROS_TEST_USERNAME}  /add
 
+\$privateIP=((ipconfig | findstr [0-9].\.)[0]).Split()[-1]
+\$subnet=((ipconfig | findstr [0-9].\.)[1]).Split()[-1]
+\$gw=((ipconfig | findstr [0-9].\.)[2]).Split()[-1]
+\$dns=(netsh interface ip show dnsservers | findstr [0-9].\.).Split()[-1]
+
+netsh interface ip set dns "Ethernet" static "127.0.0.1"
+netsh interface ip add dns name="Ethernet" addr=\$dns index=2
+netsh interface ip set address "Ethernet" static \$privateIP \$subnet \$gw
+
+netsh advfirewall firewall set rule group=”network discovery” new enable=yes
+
 </powershell>
 EOF
 
@@ -52,7 +53,7 @@ EOF
 cat <<EOF > ./scripts/setup-client.ps1
 <powershell>
 # add admin user
-net user ${KERBEROS_ADMIN_USERNAME} ‘${KERBEROS_ADMIN_PASSWORD}’ /add /y
+net user ${SERVER_ADMIN_USERNAME} ‘${SERVER_ADMIN_PASSWORD}’ /add /y
 net localgroup administrators ${KERBEROS_ADMIN_USERNAME} /add
 
 \$domain = "${DOMAIN}.${HOSTED_ZONE}"

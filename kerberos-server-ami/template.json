@@ -54,6 +54,16 @@
             "scripts": [
                 "scripts/setup-ad.ps1"
             ]
+        },
+        {
+            "type": "windows-restart",
+            "restart_check_command": "powershell -command \"&amp; {Write-Output 'Machine restarted.'}\""
+        },
+        {
+            "type": "powershell",
+            "inline": [
+                "C:/ProgramData/Amazon/EC2-Windows/Launch/Scripts/InitializeInstance.ps1 -Schedule"
+            ]
         }
     ]
 }

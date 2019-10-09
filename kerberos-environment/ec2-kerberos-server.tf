@@ -21,4 +21,8 @@ resource "aws_instance" "kerberos-server" {
   }
 
   user_data = "${file("scripts/setup-server.ps1")}"
+
+  provisioner "local-exec" {
+    command = "sleep 120"
+  }
 }
