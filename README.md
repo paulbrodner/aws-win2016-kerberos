@@ -6,6 +6,12 @@ And a Windows client machine added in domain for testing purposes.
 <img src="docs/overview.png" height="80%" width="80%" />
 
 ### Prerequisites
+
+* [aws-cli](https://docs.aws.amazon.com/cli/latest/userguide/cli-chap-install.html) and configured
+* [packer.io](https://www.packer.io/)
+* [terraform.io](https://www.terraform.io/)
+* unix based OS (for Windows, use [Cygwin](https://cygwin.com/) to run Makefile)
+
 > Note, that I am NOT creating new VPC with Subnet or genetate new key-pairs. This solution assumes you already have those created in your AWS account. 
 > custom configuration can be tweeked directly from [kerberos-environment/terraform.tfvars](./kerberos-environment/terraform.tfvars)
 
