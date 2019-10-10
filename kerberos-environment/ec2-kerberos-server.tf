@@ -20,5 +20,23 @@ resource "aws_instance" "kerberos-server" {
     Tool   = "terraform"
   }
 
-  user_data = "${file("scripts/setup-server.ps1")}"
+  user_data = "${data.template_file.setup_server.rendered}"
+
+  provisioner "local-exec" {
+    command = "sleep 300"
+  }
+}
+
+data "template_file" "setup_server" {
+  template = "${file("files/setup-server.ps1")}"
+  vars = {
+    SERVER_ADMIN_USERNAME   = "${var.SERVER_ADMIN_USERNAME}"    
+    DOMAIN                  = "${var.DOMAIN}"
+    HOSTED_ZONE             = "${var.HOSTED_ZONE}"
+    KERBEROS_ADMIN_USERNAME = "${var.KERBEROS_ADMIN_USERNAME}"
+    KERBEROS_ADMIN_PASSWORD = "${var.KERBEROS_ADMIN_PASSWORD}"
+    KERBEROS_TEST_USERNAME  = "${var.KERBEROS_TEST_USERNAME}"
+    KERBEROS_TEST_PASSWORD  = "${var.KERBEROS_TEST_PASSWORD}"
+    FQDN                    = "${var.FQDN}"
+  }
 }

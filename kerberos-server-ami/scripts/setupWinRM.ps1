@@ -11,8 +11,8 @@ write-output "Running User Data Script"
 write-host "(host) Running User Data Script"
 
 cmd /C 'wmic UserAccount where Name="opc" set PasswordExpires=False'
-$opcUser = get-wmiobject win32_useraccount | Where-Object { $_.Name -match 'opc' }
-([adsi]("WinNT://"+$opcUser.caption).replace("\","/")).SetPassword("Alfresco!1")
+#$opcUser = get-wmiobject win32_useraccount | Where-Object { $_.Name -match 'opc' }
+#([adsi]("WinNT://"+$opcUser.caption).replace("\","/")).SetPassword("Alfresco!1")
 
 Set-ExecutionPolicy Unrestricted -Scope LocalMachine -Force -ErrorAction Ignore
 

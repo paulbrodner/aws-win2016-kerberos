@@ -21,5 +21,16 @@ resource "aws_instance" "kerberos-client" {
     Tool   = "terraform"
   }
 
-  user_data = "${file("scripts/setup-client.ps1")}"
+  user_data = "${data.template_file.setup_client.rendered}"
 }
+
+data "template_file" "setup_client" {
+  template = "${file("files/setup-client.ps1")}"
+  vars = {
+    SERVER_ADMIN_USERNAME   = "${var.SERVER_ADMIN_USERNAME}"
+    SERVER_ADMIN_PASSWORD   = "${var.SERVER_ADMIN_PASSWORD}"    
+    DOMAIN                  = "${var.DOMAIN}"
+    HOSTED_ZONE             = "${var.HOSTED_ZONE}"    
+  }
+}
+
