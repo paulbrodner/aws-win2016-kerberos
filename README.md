@@ -13,7 +13,7 @@ And a Windows client machine added in domain for testing purposes.
 * unix based OS (for Windows, use [Cygwin](https://cygwin.com/) to run Makefile)
 
 > Note, that I am NOT creating new VPC with Subnet or genetate new key-pairs. This solution assumes you already have those created in your AWS account. 
-> custom configuration can be tweeked directly from [kerberos-environment/terraform.tfvars](./kerberos-environment/terraform.tfvars)
+> custom configuration can be tweeked directly from [settings.json](./settings.json) file.
 
 * initialize terraform under `kerberos-environment` folder
 
