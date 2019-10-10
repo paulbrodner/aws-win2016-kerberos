@@ -76,9 +76,9 @@ $ make cleanup
 #### Videos
 | Name         | Description |
 | ------------- | ------------- |
-| [build-server-1.mp4](./docs/build-server-1.mp4)      | creating a new AMI with custom AD DNS values |
-| [build-server-2.mp4](./docs/build-server-2.mp4)      | result of building a new AMI |
-| [start-server-1.mp4](./docs/start-server-1.mp4)      | start the server usign the AMI created |
-| [start-server-2.mp4](./docs/start-server-2.mp4)      | RDC to server started |
-| [start-server-3.mp4](./docs/start-server-3.mp4)      | what should you see on server machine |
-| [start-client-1.mp4](./docs/start-client-1.mp4)      | start a new client in domain and RDC to it |
+| [build-server-1.mp4](./docs/build-server-1.mp4?raw=true)      | creating a new AMI with custom AD DNS values |
+| [build-server-2.mp4](./docs/build-server-2.mp4?raw=true)      | result of building a new AMI |
+| [start-server-1.mp4](./docs/start-server-1.mp4?raw=true)      | start the server usign the AMI created |
+| [start-server-2.mp4](./docs/start-server-2.mp4?raw=true)      | RDC to server started |
+| [start-server-3.mp4](./docs/start-server-3.mp4?raw=true)      | what should you see on server machine |
+| [start-client-1.mp4](./docs/start-client-1.mp4?raw=true)      | start a new client in domain and RDC to it |
