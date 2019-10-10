@@ -38,9 +38,9 @@ $ make start-server AMI_ID=<use-the-id-of-the-AMI-created-previous>
 | Password      | `SERVER_ADMIN_PASSWORD` |
 
 #####  `Trubleshooting`
-> if somehow the scrip [files/setup-server.ps1](./files/setup-server.ps1) was not executed correctly (e.g. script c:\httpkerberos.keytab not found) you can log in remotely to the server and check the `C:\ProgramData\Amazon\EC2-Windows\Launch\Log\UserdataExecution.log`
+> if somehow the scrip [files/setup-server.ps1](./kerberos-environment/files/setup-server.ps1) was not executed correctly (e.g. script c:\httpkerberos.keytab not found) you can log in remotely to the server and check the `C:\ProgramData\Amazon\EC2-Windows\Launch\Log\UserdataExecution.log`
 
-> the actual script executed should be saved under: `C:\Windows\TEMP\UserScript.ps1` (run this script manually using (Windows PowerShell ISE](http://www.powertheshell.com/isesteroids/) as administrator.
+> the actual script executed should be saved under: `C:\Windows\TEMP\UserScript.ps1` (run this script manually using [Windows PowerShell ISE](http://www.powertheshell.com/isesteroids/) as administrator.
 
 #### c) start the Kerberos Client
 > this will start the Windows client machine that will be added in domain, in the server that we started on the previous step
