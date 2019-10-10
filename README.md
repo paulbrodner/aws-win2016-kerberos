@@ -1,6 +1,8 @@
 # About
 Build automatically a new Kerbesos Windows Server using a custom [AD DS](https://docs.microsoft.com/en-us/windows-server/identity/ad-ds/ad-ds-getting-started) and [DNS](https://docs.microsoft.com/en-us/windows-server/networking/dns/dns-top) in AWS.
 
+<img src="docs/overview.png" height="80%" width="80%" />
+
 And a Windows client machine added in domain for testing purposes.
 
 ### Prerequisites
@@ -74,8 +76,8 @@ $ make cleanup
 #### Videos
 | Name         | Description |
 | ------------- | ------------- |
-| [build-server-1.mp4](./videos/build-server-1.mp4)      | creating a new AMI with custom AD DNS values |
-| [build-server-2.mp4](./videos/build-server-2.mp4)      | result of building a new AMI |
-| [start-server-1.mp4](./videos/start-server-1.mp4)      | start the server usign the AMI created |
-| [start-server-2.mp4](./videos/start-server-2.mp4)      | RDC to server started |
-| [start-client-1.mp4](./videos/start-client-1.mp4)      | start a new client in domain and RDC to it |
+| [build-server-1.mp4](./docs/build-server-1.mp4)      | creating a new AMI with custom AD DNS values |
+| [build-server-2.mp4](./docs/build-server-2.mp4)      | result of building a new AMI |
+| [start-server-1.mp4](./docs/start-server-1.mp4)      | start the server usign the AMI created |
+| [start-server-2.mp4](./docs/start-server-2.mp4)      | RDC to server started |
+| [start-client-1.mp4](./docs/start-client-1.mp4)      | start a new client in domain and RDC to it |
