@@ -1,9 +1,9 @@
 # About
 Build automatically a new Kerbesos Windows Server using a custom [AD DS](https://docs.microsoft.com/en-us/windows-server/identity/ad-ds/ad-ds-getting-started) and [DNS](https://docs.microsoft.com/en-us/windows-server/networking/dns/dns-top) in AWS.
 
-<img src="docs/overview.png" height="80%" width="80%" />
-
 And a Windows client machine added in domain for testing purposes.
+
+<img src="docs/overview.png" height="80%" width="80%" />
 
 ### Prerequisites
 > Note, that I am NOT creating new VPC with Subnet or genetate new key-pairs. This solution assumes you already have those created in your AWS account. 
