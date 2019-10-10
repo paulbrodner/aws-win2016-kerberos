@@ -1,7 +1,5 @@
 <powershell>
-$log_file="c:\setup-client.log"
-New-Item -Path "c:\" -Name "setup-client.log" -ItemType "file" -Value "Start executing setup-client.ps1"
-Add-Content $log_file "Sucessfully setup network aaa"
+Write-Host "Sucessfully setup network aaa"
 
 # add admin user
 net user admin ${SERVER_ADMIN_USERNAME} /add /y
@@ -17,14 +15,14 @@ netsh dnsclient add dnsserver "Ethernet" $ip 4
 # disabling UAC
 Set-ItemProperty -Path 'HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System' -Name 'LocalAccountTokenFilterPolicy' -Value 1 -Force
 
-Add-Content $log_file  "Start: installing Chrome  browser"
+Write-Host  "Start: installing Chrome  browser"
 Invoke-WebRequest "http://dl.google.com/chrome/install/375.126/chrome_installer.exe" -OutFile $env:TEMP\chrome_installer.exe; 
 Start-Process -FilePath $env:TEMP\chrome_installer.exe -Args "/silent /install" -Verb RunAs -Wait; 
 Remove-Item $env:TEMP\chrome_installer.exe
 
-Add-Content $log_file  "Done: installing Chrome  browser"
+Write-Host  "Done: installing Chrome  browser"
 
-Add-Content $log_file  "START: applying Chrome Group Policy for Kerberos authentication"
+Write-Host  "START: applying Chrome Group Policy for Kerberos authentication"
 
 # following DOCS: https://docs.alfresco.com/6.1/concepts/auth-kerberos-clientconfig.html
 # we extracted only the files that we need from the zip and copy them to PolicyDefinitions  on client
@@ -35,7 +33,7 @@ $chromeAdml = $admxRoot + "kerberos-environment/files/admx/en-US/chrome.adml"
 Invoke-WebRequest $chromeAdmx -OutFile C:\Windows\PolicyDefinitions\chrome.admx;
 Invoke-WebRequest $chromeAdml -OutFile C:\Windows\PolicyDefinitions\en-US\chrome.adml;
 
-Add-Content $log_file  "Downloading: $chromeAdmx";
+Write-Host  "Downloading: $chromeAdmx";
 gpupdate /force
 
 # we also need to specify the wildcard of the Kerberos delegation server whitelist  (step 8. from docs above)
@@ -43,7 +41,7 @@ New-Item -Path "HKLM:\Software\Policies\Google"
 New-Item -Path "HKLM:\Software\Policies\Google\Chrome"
 New-ItemProperty -Path "HKLM:\Software\Policies\Google\Chrome" -PropertyType String  -Name AuthNegotiateDelegateWhitelist -Value "*.dev.alfresco.me"
 
-Add-Content $log_file  "DONE: applying Chrome Group Policy for Kerberos authentication"
+Write-Host  "DONE: applying Chrome Group Policy for Kerberos authentication"
 
 # add computer in domain
 $password = "${SERVER_ADMIN_PASSWORD}" | ConvertTo-SecureString -asPlainText -Force

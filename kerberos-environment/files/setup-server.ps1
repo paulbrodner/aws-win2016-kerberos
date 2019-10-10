@@ -1,13 +1,11 @@
 <powershell>
-$log_file="c:\setup-server.log"
-New-Item -Path "c:\" -Name "setup-server.log" -ItemType "file" -Value "Start executing setup-server.ps1"
-Add-Content $log_file "Sucessfully setup network"
+Write-Host "Sucessfully setup network"
 
 # this user is already created and exist here
 # we only need to add it to Domain Admins so we can remotely loggin with it
 net group "Domain Admins" ${SERVER_ADMIN_USERNAME}  /add
 
-Add-Content $log_file "Sucessfully added ${SERVER_ADMIN_USERNAME} to Domain Admins"
+Write-Host "Sucessfully added ${SERVER_ADMIN_USERNAME} to Domain Admins"
 
 $domain = "${DOMAIN}.${HOSTED_ZONE}"
 $domain_array = $domain.split('.')
@@ -18,22 +16,24 @@ foreach ($domcomp in $domain_array) {
    $domain_path = "$domain_path,dc=$domcomp"
 }
 
-Add-Content $log_file "Preparing $domain_path users..."
+Write-Host "Preparing $domain_path users..."
+start-sleep -Seconds 20
 
 #Create kerberos authentication user used for creating keytabs
-Add-Content $log_file "Create KERBEROS_ADMIN_USERNAME: [${KERBEROS_ADMIN_USERNAME}] in domain: [$domain_path]"
+Write-Host "Creating KERBEROS_ADMIN_USERNAME: [${KERBEROS_ADMIN_USERNAME}] in domain: [$domain_path]"
 $kerbauth_pwd_secure = ConvertTo-SecureString ${KERBEROS_ADMIN_PASSWORD} -AsPlainText -Force
 
 New-ADUser -Server $env:computername -Name "${KERBEROS_ADMIN_USERNAME}" -DisplayName "Kerberos Auth" -GivenName Kerberos -Surname Auth -TrustedForDelegation 1 -Path "$domain_path" -ChangePasswordAtLogon 0 -AccountPassword $kerbauth_pwd_secure -PasswordNeverExpires 1 -Enabled 1
-Set-ADAccountControl -Server $Env:computername -Identity ${KERBEROS_ADMIN_USERNAME} -DoesNotRequirePreAuth:$true
+
+Set-ADAccountControl -Server $env:computername -Identity "${KERBEROS_ADMIN_USERNAME}" -DoesNotRequirePreAuth:$true
 
 net group "Domain Admins" ${KERBEROS_ADMIN_USERNAME}  /add
-Add-Content $log_file "Successfully added  KERBEROS_ADMIN_USERNAME: [${KERBEROS_ADMIN_USERNAME}] in Domain Admins group"
+Write-Host "Successfully added  KERBEROS_ADMIN_USERNAME: [${KERBEROS_ADMIN_USERNAME}] in Domain Admins group"
 
 $krbtest_pwd_secure = ConvertTo-SecureString ${KERBEROS_TEST_PASSWORD} -AsPlainText -Force
 New-ADUser -Server $env:computername -Name "${KERBEROS_TEST_USERNAME}" -DisplayName "Kerberos TestUser" -GivenName Kerberos -Surname TestUser -TrustedForDelegation 1 -Path "$domain_path" -ChangePasswordAtLogon 0 -AccountPassword $krbtest_pwd_secure -PasswordNeverExpires 1 -Enabled 1
 net group "Domain Admins" ${KERBEROS_TEST_USERNAME}  /add
-Add-Content $log_file  "Successfully added KERBEROS_TEST_USERNAME : [${KERBEROS_TEST_USERNAME}]"
+Write-Host  "Successfully added KERBEROS_TEST_USERNAME : [${KERBEROS_TEST_USERNAME}]"
 
 # # generate kerberos keys
 # # https://docs.alfresco.com/5.1/tasks/auth-kerberos-cross-domain.html
