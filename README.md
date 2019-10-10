@@ -3,7 +3,7 @@ Build automatically a new Kerbesos Windows Server using a custom [AD DS](https:/
 
 And a Windows client machine added in domain for testing purposes.
 
-<img src="docs/overview.png" height="80%" width="80%" />
+<img src="docs/big-picture.png" height="80%" width="80%" />
 
 ### Prerequisites
 
