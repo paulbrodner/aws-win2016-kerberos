@@ -47,11 +47,12 @@ try {
    start-sleep -Seconds 60
  }
 
+start-sleep -Seconds 300
+
 #Create kerberos authentication user used for creating keytabs
 Write-Host "Creating KERBEROS_ADMIN_USERNAME: [${KERBEROS_ADMIN_USERNAME}] in domain: [$domain_path]"
 $kerbauth_pwd_secure = ConvertTo-SecureString ${KERBEROS_ADMIN_PASSWORD} -AsPlainText -Force
 
-New-ADUser -Server $privateIP -Name "${KERBEROS_ADMIN_USERNAME}" -DisplayName "Kerberos Auth" -GivenName Kerberos -Surname Auth -TrustedForDelegation 1 -Path "$domain_path" -ChangePasswordAtLogon 0 -AccountPassword $kerbauth_pwd_secure -PasswordNeverExpires 1 -Enabled 1
 New-ADUser -Server $privateIP -Name "${KERBEROS_ADMIN_USERNAME}" -DisplayName "Kerberos Auth" -GivenName Kerberos -Surname Auth -TrustedForDelegation 1 -Path "$domain_path" -ChangePasswordAtLogon 0 -AccountPassword $kerbauth_pwd_secure -PasswordNeverExpires 1 -Enabled 1
 
 Set-ADAccountControl -Identity "${KERBEROS_ADMIN_USERNAME}" -DoesNotRequirePreAuth:$true

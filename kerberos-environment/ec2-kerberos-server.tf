@@ -22,9 +22,6 @@ resource "aws_instance" "kerberos-server" {
 
   user_data = "${data.template_file.setup_server.rendered}"
 
-  provisioner "local-exec" {
-    command = "sleep 300"
-  }
 }
 
 data "template_file" "setup_server" {
