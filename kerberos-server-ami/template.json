@@ -32,6 +32,7 @@
                 "Department": "Engineering",
                 "Purpose": "SSO Testing",
                 "NoAutomaticShutdown": "True",
+                "Production": "False",
                 "Tool": "Packer"
             },
             "ami_description": "Windows Server AMI for Platform Services: {{user `DOMAIN`}}"

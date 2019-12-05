@@ -21,6 +21,7 @@ resource "aws_instance" "kerberos-server" {
     Department = "Engineering"
     Purpose = "SSO Testing"
     NoAutomaticShutdown = "True"
+    Production = "False"
     Tool   = "Terraform"
   }
 
