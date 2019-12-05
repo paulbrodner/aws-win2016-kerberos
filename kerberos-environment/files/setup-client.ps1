@@ -26,7 +26,7 @@ Write-Host  "START: applying Chrome Group Policy for Kerberos authentication"
 
 # following DOCS: https://docs.alfresco.com/6.1/concepts/auth-kerberos-clientconfig.html
 # we extracted only the files that we need from the zip and copy them to PolicyDefinitions  on client
-$admxRoot   = "https://raw.githubusercontent.com/paulbrodner/aws-win2016-kerberos/master/"
+$admxRoot   = "https://raw.githubusercontent.com/Alfresco/aws-win2016-kerberos/master/"
 $chromeAdmx = $admxRoot + "kerberos-environment/files/admx/chrome.admx"
 $chromeAdml = $admxRoot + "kerberos-environment/files/admx/en-US/chrome.adml"
 
