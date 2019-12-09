@@ -17,8 +17,13 @@ resource "aws_instance" "kerberos-client" {
   monitoring = false
   tags = {
     Name   = "${var.DOMAIN}-client"
-    Author = "pbrodner"
-    Tool   = "terraform"
+    Creator = "Platform-Services"
+    Owner  = "Platform-Services"
+    Department = "Engineering"
+    Purpose = "SSO testing"
+    NoAutomaticShutdown = "True"
+    Production = "False"
+    Tool   = "Terraform"
   }
 
   user_data = "${data.template_file.setup_client.rendered}"
