@@ -38,11 +38,13 @@ endif
 					-var "SERVER_HOSTNAME=$(SERVER_HOSTNAME)" \
 	-target aws_route53_record.domain 
 
-start-client: ## starting up the Kerberos Client
+start-client: get_hostname ## starting up the Kerberos Client
 	@echo "Starting up a new Client added in Kerberos environment"
 	cd kerberos-environment && \
 	cat /dev/null > $(TF_LOG_PATH) && \
-	terraform apply -var-file $(SETTINGS_FILE) -target aws_instance.kerberos-client
+	terraform apply -var-file $(SETTINGS_FILE) \
+					-var "SERVER_HOSTNAME=$(SERVER_HOSTNAME)" \
+					-target aws_instance.kerberos-client
 
 delete-client: ## delete the client
 	@echo "Deleting the Client added in Kerberos environment"
@@ -55,6 +57,6 @@ cleanup: ## deleting existing Kerberos environment
 	cd kerberos-environment && \
 	terraform destroy -var-file $(SETTINGS_FILE)
 
-get_hostname: # return t		
+get_hostname:
 	$(eval SERVER_HOSTNAME:=$(shell echo `iconv -f UTF-16 -t UTF-8 kerberos-server-ami/hostname`))
 	@echo Server hostname: $(SERVER_HOSTNAME)

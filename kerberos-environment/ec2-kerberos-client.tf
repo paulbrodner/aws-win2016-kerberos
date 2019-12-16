@@ -35,7 +35,8 @@ data "template_file" "setup_client" {
     SERVER_ADMIN_USERNAME   = "${var.SERVER_ADMIN_USERNAME}"
     SERVER_ADMIN_PASSWORD   = "${var.SERVER_ADMIN_PASSWORD}"    
     DOMAIN                  = "${var.DOMAIN}"
-    HOSTED_ZONE             = "${var.HOSTED_ZONE}"    
+    HOSTED_ZONE             = "${var.HOSTED_ZONE}"
+    SERVER_HOSTNAME         = "${var.SERVER_HOSTNAME}"    
   }
 }
 

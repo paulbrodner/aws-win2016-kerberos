@@ -5,7 +5,7 @@ Write-Host "Sucessfully setup network aaa"
 net user admin ${SERVER_ADMIN_USERNAME} /add /y
 net localgroup administrators kerberosauth /add
 
-$domain = "${DOMAIN}.${HOSTED_ZONE}"
+$domain = "${SERVER_HOSTNAME}.${DOMAIN}.${HOSTED_ZONE}"
 # set DNS ip address
 $ping = New-Object System.Net.NetworkInformation.Ping
 $ip = $($ping.Send($domain).Address).IPAddressToString
