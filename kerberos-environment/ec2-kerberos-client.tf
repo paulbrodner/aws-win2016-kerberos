@@ -37,6 +37,7 @@ data "template_file" "setup_client" {
     DOMAIN                  = "${var.DOMAIN}"
     HOSTED_ZONE             = "${var.HOSTED_ZONE}"
     SERVER_HOSTNAME         = "${var.SERVER_HOSTNAME}"    
+    FQDN                    = "${var.FQDN}"
   }
 }
 
