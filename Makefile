@@ -60,3 +60,11 @@ cleanup: ## deleting existing Kerberos environment
 get_hostname:
 	$(eval SERVER_HOSTNAME:=$(shell echo `iconv -f UTF-16 -t UTF-8 kerberos-server-ami/hostname`))
 	@echo Server hostname: $(SERVER_HOSTNAME)
+
+config: get_hostname ## generate the krb5.config
+	cd kerberos-environment && \
+	cat /dev/null > $(TF_LOG_PATH) && \
+	terraform apply -var-file $(SETTINGS_FILE) \
+					-var "SERVER_HOSTNAME=$(SERVER_HOSTNAME)" \
+					-target local_file.krb5_config
+

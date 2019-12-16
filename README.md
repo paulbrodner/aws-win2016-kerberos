@@ -70,8 +70,14 @@ $ make start-client
 | Username      | `KERBEROS_TEST_USERNAME`@`DOMAIN`.`HOSTED_ZONE`  |
 | Password      | `KERBEROS_TEST_PASSWORD` |
 
+#### d) generate kerberos configuration krb5.conf
+> there is [krb5.config](https://docs.alfresco.com/6.1/tasks/kerberos-alfresco-config.html) file that you need to generate in order to use these environment(s). Generate it, running this command:
 
-#### d) cleanup everithing
+```
+$ make config
+```
+
+#### e) cleanup everithing
 > this will delete the kerberos server and windows machine, route53 created. It will NOT delete the AMI
 
 ```

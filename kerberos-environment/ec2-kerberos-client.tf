@@ -40,3 +40,16 @@ data "template_file" "setup_client" {
   }
 }
 
+data "template_file" "krb5_config" {
+  template = "${file("files/krb5.conf.tmpl")}"
+  vars = {
+    DOMAIN                  = "${var.DOMAIN}"
+    HOSTED_ZONE             = "${var.HOSTED_ZONE}"
+    SERVER_HOSTNAME         = "${var.SERVER_HOSTNAME}"        
+  }
+}
+
+resource "local_file" "krb5_config" {
+    content     = "${data.template_file.krb5_config.rendered}"
+    filename = "../krb5.config"
+}

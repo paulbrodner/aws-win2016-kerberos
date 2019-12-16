@@ -5,10 +5,10 @@ Write-Host "Sucessfully setup network aaa"
 net user admin ${SERVER_ADMIN_USERNAME} /add /y
 net localgroup administrators kerberosauth /add
 
-$domain = "${SERVER_HOSTNAME}.${DOMAIN}.${HOSTED_ZONE}"
+$domain = "${DOMAIN}.${HOSTED_ZONE}".ToLower()
 # set DNS ip address
 $ping = New-Object System.Net.NetworkInformation.Ping
-$ip = $($ping.Send($domain).Address).IPAddressToString
+$ip = $($ping.Send("${SERVER_HOSTNAME}.${DOMAIN}.${HOSTED_ZONE}").Address).IPAddressToString
 
 netsh dnsclient add dnsserver "Ethernet" $ip 4
 
