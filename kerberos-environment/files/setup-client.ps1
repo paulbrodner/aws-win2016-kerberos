@@ -19,11 +19,9 @@ Write-Host  "Start: installing Chrome  browser"
 Invoke-WebRequest "http://dl.google.com/chrome/install/375.126/chrome_installer.exe" -OutFile $env:TEMP\chrome_installer.exe; 
 Start-Process -FilePath $env:TEMP\chrome_installer.exe -Args "/silent /install" -Verb RunAs -Wait; 
 Remove-Item $env:TEMP\chrome_installer.exe
-
 Write-Host  "Done: installing Chrome  browser"
 
 Write-Host  "START: applying Chrome Group Policy for Kerberos authentication"
-
 # following DOCS: https://docs.alfresco.com/6.1/concepts/auth-kerberos-clientconfig.html
 # we extracted only the files that we need from the zip and copy them to PolicyDefinitions  on client
 $admxRoot   = "https://raw.githubusercontent.com/Alfresco/aws-win2016-kerberos/master/"
@@ -32,7 +30,6 @@ $chromeAdml = $admxRoot + "kerberos-environment/files/admx/en-US/chrome.adml"
 
 Invoke-WebRequest $chromeAdmx -OutFile C:\Windows\PolicyDefinitions\chrome.admx;
 Invoke-WebRequest $chromeAdml -OutFile C:\Windows\PolicyDefinitions\en-US\chrome.adml;
-
 Write-Host  "Downloading: $chromeAdmx";
 gpupdate /force
 
@@ -42,6 +39,19 @@ New-Item -Path "HKLM:\Software\Policies\Google\Chrome"
 New-ItemProperty -Path "HKLM:\Software\Policies\Google\Chrome" -PropertyType String  -Name AuthNegotiateDelegateWhitelist -Value "*.dev.alfresco.me"
 
 Write-Host  "DONE: applying Chrome Group Policy for Kerberos authentication"
+
+Write-Host  "Start: chromedriver"
+Invoke-WebRequest "https://chromedriver.storage.googleapis.com/79.0.3945.36/chromedriver_win32.zip" -OutFile $env:TEMP\chromedriver_win32.zip; 
+Expand-Archive -LiteralPath $env:TEMP\chromedriver_win32.zip -DestinationPath C:\chromedriver
+Remove-Item $env:TEMP\chromedriver_win32.zip;
+[System.Environment]::SetEnvironmentVariable("PATH", $Env:Path + ";C:\chromedriver", "Machine")
+Write-Host  "DONE: chromedriver installation"
+
+# install package manager
+Set-ExecutionPolicy Bypass -Scope Process -Force; Invoke-Expression ((New-Object System.Net.WebClient).DownloadString('https://chocolatey.org/install.ps1'))
+
+# install tools
+choco install jdk8 --force -y -and choco install git --force -y -and choco install maven --force -y
 
 # add computer in domain
 $password = "${SERVER_ADMIN_PASSWORD}" | ConvertTo-SecureString -asPlainText -Force
