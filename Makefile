@@ -25,15 +25,18 @@ build-server: ## building a new Kerberos AMI
 	packer validate -var-file $(SETTINGS_FILE) template.json && \
 	packer $(BUILD_ARGS) -var-file $(SETTINGS_FILE) template.json
 
-start-server: ## starting up the Kerberos Server
+start-server: get_hostname ## starting up the Kerberos Server
 ifeq ($(AMI_ID), )
-	@echo "Please provide AMI ID:\n\t $$ make start AMI_ID=ami-0ea1f0fbfefbe5956"
+	@echo "Please provide AMI ID:\n\t $$ make start-server AMI_ID=ami-0ea1f0fbfefbe5956"
 	@exit 1
 endif
 	@echo "Creating a new Kerberos Environment"
 	cd kerberos-environment && \
 	cat /dev/null > $(TF_LOG_PATH) && \
-	terraform apply -var-file $(SETTINGS_FILE) -var "SERVER_AMI=$(AMI_ID)" -target aws_route53_record.domain 
+	terraform apply -var-file $(SETTINGS_FILE) \
+					-var "SERVER_AMI=$(AMI_ID)" \
+					-var "SERVER_HOSTNAME=$(SERVER_HOSTNAME)" \
+	-target aws_route53_record.domain 
 
 start-client: ## starting up the Kerberos Client
 	@echo "Starting up a new Client added in Kerberos environment"
@@ -41,7 +44,17 @@ start-client: ## starting up the Kerberos Client
 	cat /dev/null > $(TF_LOG_PATH) && \
 	terraform apply -var-file $(SETTINGS_FILE) -target aws_instance.kerberos-client
 
+delete-client: ## delete the client
+	@echo "Deleting the Client added in Kerberos environment"
+	cd kerberos-environment && \
+	cat /dev/null > $(TF_LOG_PATH) && \
+	terraform destroy -var-file $(SETTINGS_FILE) -target aws_instance.kerberos-client
+
 cleanup: ## deleting existing Kerberos environment
 	@echo "Deleting existing Kerberos Environment"
 	cd kerberos-environment && \
 	terraform destroy -var-file $(SETTINGS_FILE)
+
+get_hostname: # return t		
+	$(eval SERVER_HOSTNAME:=$(shell echo `iconv -f UTF-16 -t UTF-8 kerberos-server-ami/hostname`))
+	@echo Server hostname: $(SERVER_HOSTNAME)
