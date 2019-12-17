@@ -1,0 +1,14 @@
+[libdefaults]
+default_realm = ${upper(DOMAIN)}.${upper(HOSTED_ZONE)}
+default_tkt_enctypes = rc4-hmac
+default_tgs_enctypes = rc4-hmac
+
+[realms]
+${upper(DOMAIN)}.${upper(HOSTED_ZONE)} = {
+# access via internal IP addreses
+   kdc = ${lower(SERVER_HOSTNAME)}.${lower(DOMAIN)}.${lower(HOSTED_ZONE)}
+}
+
+[domain_realm]
+${lower(SERVER_HOSTNAME)}.${lower(DOMAIN)}.${lower(HOSTED_ZONE)} = ${upper(DOMAIN)}.${upper(HOSTED_ZONE)}
+.${lower(SERVER_HOSTNAME)}.${lower(DOMAIN)}.${lower(HOSTED_ZONE)} = ${upper(DOMAIN)}.${upper(HOSTED_ZONE)}

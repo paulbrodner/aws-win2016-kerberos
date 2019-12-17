@@ -50,6 +50,16 @@
             ]
         },
         {
+            "type": "powershell",            
+            "inline": [ "hostname > c:/hostname" ]
+        },
+        {
+            "type": "file",
+            "direction": "download",
+            "source": "c:/hostname",
+            "destination": "./hostname"
+        },
+        {
             "type": "powershell",
             "environment_vars": [
                 "ADMIN={{user `SERVER_ADMIN_USERNAME`}}",                

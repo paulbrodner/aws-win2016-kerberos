@@ -6,6 +6,11 @@ variable "REGION" {
   default = "eu-west-1"
 }
 
+variable "SERVER_HOSTNAME" {
+  description = "What is the hostname of the Kerberos Server"  
+  default     = "dynamically-set"
+}
+
 variable "SERVER_AMI" {
   description = "Which Kerberos AMI should we use to create new EC2 Instance"  
   default     = "to-be-provided"
