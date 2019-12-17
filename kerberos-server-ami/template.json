@@ -27,7 +27,13 @@
             ],
             "tags": {
                 "Name": "{{user `DOMAIN`}}",
-                "Project": "Platform Services"
+                "Creator": "Platform-Services",
+                "Owner": "Platform-Services",
+                "Department": "Engineering",
+                "Purpose": "SSO Testing",
+                "NoAutomaticShutdown": "True",
+                "Production": "False",
+                "Tool": "Packer"
             },
             "ami_description": "Windows Server AMI for Platform Services: {{user `DOMAIN`}}"
         }
@@ -42,6 +48,16 @@
             "scripts": [
                 "scripts/add-users.ps1"
             ]
+        },
+        {
+            "type": "powershell",            
+            "inline": [ "hostname > c:/hostname" ]
+        },
+        {
+            "type": "file",
+            "direction": "download",
+            "source": "c:/hostname",
+            "destination": "./hostname"
         },
         {
             "type": "powershell",

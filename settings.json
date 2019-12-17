@@ -1,7 +1,7 @@
 {
-    "DOMAIN": "pbrodner",
+    "DOMAIN": "platform-services",
     "HOSTED_ZONE": "dev.alfresco.me",
-    "FQDN": "alfresco-cs-repository.pbrodner.dev.alfresco.me",
+    "FQDN": "alfresco-cs-repository.platform-services.dev.alfresco.me",
     "REGION": "eu-west-1",
     "VPC_ID": "vpc-0e27a5ced96393be5",
     "SUBNET_ID": "subnet-03ca8913a7b738c32",

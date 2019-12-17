@@ -17,8 +17,13 @@ resource "aws_instance" "kerberos-client" {
   monitoring = false
   tags = {
     Name   = "${var.DOMAIN}-client"
-    Author = "pbrodner"
-    Tool   = "terraform"
+    Creator = "Platform-Services"
+    Owner  = "Platform-Services"
+    Department = "Engineering"
+    Purpose = "SSO testing"
+    NoAutomaticShutdown = "True"
+    Production = "False"
+    Tool   = "Terraform"
   }
 
   user_data = "${data.template_file.setup_client.rendered}"
@@ -30,7 +35,22 @@ data "template_file" "setup_client" {
     SERVER_ADMIN_USERNAME   = "${var.SERVER_ADMIN_USERNAME}"
     SERVER_ADMIN_PASSWORD   = "${var.SERVER_ADMIN_PASSWORD}"    
     DOMAIN                  = "${var.DOMAIN}"
-    HOSTED_ZONE             = "${var.HOSTED_ZONE}"    
+    HOSTED_ZONE             = "${var.HOSTED_ZONE}"
+    SERVER_HOSTNAME         = "${var.SERVER_HOSTNAME}"    
+    FQDN                    = "${var.FQDN}"
   }
 }
 
+data "template_file" "krb5_config" {
+  template = "${file("files/krb5.conf.tmpl")}"
+  vars = {
+    DOMAIN                  = "${var.DOMAIN}"
+    HOSTED_ZONE             = "${var.HOSTED_ZONE}"
+    SERVER_HOSTNAME         = "${var.SERVER_HOSTNAME}"        
+  }
+}
+
+resource "local_file" "krb5_config" {
+    content     = "${data.template_file.krb5_config.rendered}"
+    filename = "../krb5.config"
+}
