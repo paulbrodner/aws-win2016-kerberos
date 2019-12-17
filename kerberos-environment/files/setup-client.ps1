@@ -36,8 +36,9 @@ gpupdate /force
 # we also need to specify the wildcard of the Kerberos delegation server whitelist  (step 8. from docs above)
 New-Item -Path "HKLM:\Software\Policies\Google"
 New-Item -Path "HKLM:\Software\Policies\Google\Chrome"
-New-ItemProperty -Path "HKLM:\Software\Policies\Google\Chrome" -PropertyType String  -Name AuthNegotiateDelegateWhitelist -Value "*.dev.alfresco.me"
-
+$VALUES = "*" + $FQDN.Substring($FQDN.IndexOf(".")) + "," + $FQDN
+New-ItemProperty -Path "HKLM:\Software\Policies\Google\Chrome" -PropertyType String  -Name AuthNegotiateDelegateWhitelist -Value "$VALUES"
+New-ItemProperty -Path "HKLM:\Software\Policies\Google\Chrome" -PropertyType String  -Name AuthServerWhitelist -Value "$VALUES"
 Write-Host  "DONE: applying Chrome Group Policy for Kerberos authentication"
 
 Write-Host  "Start: chromedriver"
