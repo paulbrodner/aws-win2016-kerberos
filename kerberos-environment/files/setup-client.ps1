@@ -51,7 +51,7 @@ Write-Host  "DONE: chromedriver installation"
 Set-ExecutionPolicy Bypass -Scope Process -Force; Invoke-Expression ((New-Object System.Net.WebClient).DownloadString('https://chocolatey.org/install.ps1'))
 
 # install tools
-choco install jdk8 --force -y -and choco install git --force -y -and choco install maven --force -y
+choco install jdk11 --force -y -and choco install git --force -y -and choco install maven --force -y
 
 # add computer in domain
 $password = "${SERVER_ADMIN_PASSWORD}" | ConvertTo-SecureString -asPlainText -Force
